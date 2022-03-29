@@ -33,7 +33,7 @@ class PositionMatrix:
         # INITIALIZE matrix
         matrix = []
 
-        listOfRow = rawString.split('\n')
+        listOfRow = rawString.split("\r\n")
 
         if len(listOfRow) != PositionMatrix.nRow:
             raise Exception(f"Jumlah baris pada file txt harus berjumlah 4! Jumlah baris pada file adalah {len(listOfRow)}.")
@@ -255,12 +255,12 @@ class PositionTree:
         rawPath = self.branchAndBound()
         endTime = time()
 
-        path = map(lambda T : T.getStringMatrix(), rawPath)
+        pathOfStringMatrix = map(lambda T : T.getStringMatrix(), rawPath)
 
         numOfNodes = len(PositionMatrix.visitedNodes)
         PositionMatrix.visitedNodes = []
 
-        return (path, numOfNodes, endTime - startTime)
+        return (pathOfStringMatrix, numOfNodes, endTime - startTime)
 
 if __name__ == "__main__":
     try:

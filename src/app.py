@@ -1,14 +1,19 @@
 from flask import Flask, render_template, request, session
 from puzzle import PositionMatrix, PositionTree
+from dotenv import load_dotenv
 
+import json
+import os
 import sys # TEMP
 
 app = Flask(__name__)
 
+app.config["SECRET_KEY"] = os.getenv("SECRET_KEY")
+
 @app.route("/", methods = ["GET"])
 def main_page():
     try:
-        return render_template("index.html", matrix = session["matrix"].getStringMatrix())
+        return render_template("index.html", matrix = PositionMatrix(json.loads(session["matrix"])))
 
     except KeyError:
         return render_template("index.html", matrix = PositionMatrix.getEmptyMatrix())
@@ -16,8 +21,10 @@ def main_page():
 @app.route("/view", methods = ["GET"])
 def view_page():
     try:
-        path, numOfNodes, executionTime = session["solution"]
-        return render_template("index.html", path = path, numOfNodes = numOfNodes, executionTime = executionTime)
+        PT = PositionTree(PositionMatrix(json.loads(session["matrix"])))
+        pathOfStringMatrix, numOfNodes, executionTime = PT.calculate()
+
+        return render_template("index.html", pathOfStringMatrix = pathOfStringMatrix, numOfNodes = numOfNodes, executionTime = executionTime)
 
     except KeyError:
         return render_template("index.html", path = [], numOfNodes = 0, executionTime = 0)
@@ -26,8 +33,9 @@ def view_page():
 def upload_txt():
     try:
         file = request.files["file"]
-        session["matrix"] = PositionMatrix.fromFile(file.stream.read().decode("ASCII"))
-        session["solution"] = PositionTree.calculate(session["matrix"])
+        session["matrix"] = json.dumps(PositionMatrix.fromFile(file.stream.read().decode("ASCII")).matrix)
+
+        # print(PositionMatrix(json.loads(session["matrix"])).getStringMatrix(), file=sys.stdout) # REMOVE THIS
 
         return "Created", 201
 
