@@ -13,11 +13,21 @@ def main_page():
     except KeyError:
         return render_template("index.html", matrix = PositionMatrix.getEmptyMatrix())
 
+@app.route("/view", methods = ["GET"])
+def view_page():
+    try:
+        path, numOfNodes, executionTime = session["solution"]
+        return render_template("index.html", path = path, numOfNodes = numOfNodes, executionTime = executionTime)
+
+    except KeyError:
+        return render_template("index.html", path = [], numOfNodes = 0, executionTime = 0)
+
 @app.route("/upload", methods = ["POST"])
 def upload_txt():
     try:
         file = request.files["file"]
-        session["matrix"] = PositionMatrix(file.stream.read().decode("ASCII"))
+        session["matrix"] = PositionMatrix.fromFile(file.stream.read().decode("ASCII"))
+        session["solution"] = PositionTree.calculate(session["matrix"])
 
         return "Created", 201
 

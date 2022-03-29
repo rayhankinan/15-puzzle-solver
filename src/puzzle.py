@@ -57,9 +57,7 @@ class PositionMatrix:
 
                     matrix.append(temp)
 
-        PM = PositionMatrix(matrix)
-
-        return PM
+        return PositionMatrix(matrix)
 
     # CONSTRUCTOR
     def __init__(self, data):
@@ -194,7 +192,7 @@ class PositionMatrix:
 
 
 class PositionTree:
-    # STATIC ATTRIBUTE
+    # CONSTANT ATTRIBUTE
     move = ["UP", "RIGHT", "DOWN", "LEFT"]
     targetPosition = PositionMatrix([[PositionMatrix.nRow * i + j + 1 for j in range(PositionMatrix.nCol)] for i in range(PositionMatrix.nRow)])
 
@@ -212,7 +210,7 @@ class PositionTree:
         else:
             Q = PriorityQueue()
 
-            print(("ROOT", rootNode.getStringMatrix())) # REMOVE THIS
+            # print(("ROOT", rootNode.getStringMatrix())) # REMOVE THIS
 
             Q.put(rootNode)
             PositionMatrix.visitedNodes.append(rootNode)
@@ -231,7 +229,7 @@ class PositionTree:
                             childNode = currentNode << move
 
                             if childNode is not None:
-                                print((move, childNode.getTotalCost(), childNode.getStringMatrix())) # REMOVE THIS
+                                # print((move, childNode.getTotalCost(), childNode.getStringMatrix())) # REMOVE THIS
 
                                 Q.put(childNode)
 
@@ -251,18 +249,22 @@ class PositionTree:
                 return result
 
     def calculate(self):
-        startTime = time()
-        PT = self.branchAndBound()
-        endTime = time()
-
-        N = len(PositionMatrix.visitedNodes)
         PositionMatrix.visitedNodes = []
 
-        return (PT, N, endTime - startTime)
+        startTime = time()
+        rawPath = self.branchAndBound()
+        endTime = time()
+
+        path = map(lambda T : T.getStringMatrix(), rawPath)
+
+        numOfNodes = len(PositionMatrix.visitedNodes)
+        PositionMatrix.visitedNodes = []
+
+        return (path, numOfNodes, endTime - startTime)
 
 if __name__ == "__main__":
     try:
-        file = open("test/bisa2.txt")
+        file = open("test/bisa.txt")
         PM = PositionMatrix.fromFile(file.read())
         file.close()
 
