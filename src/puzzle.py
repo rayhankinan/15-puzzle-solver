@@ -190,6 +190,10 @@ class PositionTree:
             visitedNodes = []
 
             Q.put(rootNode)
+            visitedNodes.append(rootNode)
+
+            print(("ROOT", rootNode.getTotalCost(), rootNode.getStringMatrix())) # REMOVE THIS
+
             currentNode = None
 
             while not Q.empty():
@@ -224,7 +228,7 @@ class PositionTree:
                                 print((move, childNode.getTotalCost(), childNode.getStringMatrix())) # REMOVE THIS
 
                                 visitedNodes.append(childNode)
-                                Q.put(childNode)     
+                                Q.put(childNode)
 
                         except IndexError:
                             pass
