@@ -6,6 +6,20 @@ class PositionMatrix:
     nRow = 4
     nCol = 4
 
+    # STATIC METHOD
+    def getEmptyMatrix():
+        matrix = []
+
+        for i in range(PositionMatrix.nRow):
+            temp = []
+
+            for j in range(PositionMatrix.nCol):
+                temp.append("")
+
+            matrix.append(temp)
+
+        return matrix
+
     # CONSTRUCTOR
     def __init__(self, data):
         # INITIALIZE legalElement
@@ -240,7 +254,7 @@ class PositionTree:
                 result = []
 
                 while currentNode is not None:
-                    result.append(currentNode)
+                    result.insert(0, currentNode)
                     currentNode = currentNode.prevPosition
 
                 return result
@@ -256,10 +270,9 @@ if __name__ == "__main__":
         print()
 
         T = PositionTree(PM)
-        result = T.branchAndBound()
-        result.reverse()
+        listOfNode = T.branchAndBound()
         
-        for node in result:
+        for node in listOfNode:
             print(node.getStringMatrix())
 
     except Exception as e:

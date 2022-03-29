@@ -1,15 +1,19 @@
 from flask import Flask, render_template, request, session
-from puzzle import PositionMatrix, branchAndBound
+from puzzle import PositionMatrix, PositionTree
 
 import sys # TEMP
 
 app = Flask(__name__)
 
-@app.route("/", methods=["GET"])
+@app.route("/", methods = ["GET"])
 def main_page():
-    return render_template("index.html")
+    try:
+        return render_template("index.html", matrix = session["matrix"].getStringMatrix())
 
-@app.route("/upload", methods=["POST"])
+    except KeyError:
+        return render_template("index.html", matrix = PositionMatrix.getEmptyMatrix())
+
+@app.route("/upload", methods = ["POST"])
 def upload_txt():
     try:
         file = request.files["file"]
@@ -20,7 +24,7 @@ def upload_txt():
     except Exception as e:
         return f"Bad Request: {e}", 400
 
-@app.route("/clear", methods=["DELETE"])
+@app.route("/clear", methods = ["DELETE"])
 def delete_txt():
     try:
         session.pop("matrix", None)
@@ -31,4 +35,4 @@ def delete_txt():
         return f"Bad Request: {e}", 400
 
 if __name__ == "__main__":
-    app.run(port=3000, debug=True)
+    app.run(port = 3000, debug = True)
