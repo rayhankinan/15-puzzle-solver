@@ -247,17 +247,19 @@ class PositionTree:
 
 if __name__ == "__main__":
     try:
-        file = open("test/1.txt")
+        file = open("test/bisa2.txt")
         data = file.read()
         file.close()
 
         PM = PositionMatrix(data)
         print(PM.getSumKurang() + PM.getX())
+        print()
 
         T = PositionTree(PM)
         result = T.branchAndBound()
         result.reverse()
-    
+
+        print()
         for node in result:
             print(node.getStringMatrix())
 
