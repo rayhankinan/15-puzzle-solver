@@ -192,7 +192,7 @@ class PositionTree:
             Q.put(rootNode)
             visitedNodes.append(rootNode)
 
-            print(("ROOT", rootNode.getTotalCost(), rootNode.getStringMatrix())) # REMOVE THIS
+            # print(("ROOT", rootNode.getTotalCost(), rootNode.getStringMatrix())) # REMOVE THIS
 
             currentNode = None
 
@@ -225,7 +225,7 @@ class PositionTree:
                             currentNode.nextPosition[move] = childNode
 
                             if childNode not in visitedNodes:
-                                print((move, childNode.getTotalCost(), childNode.getStringMatrix())) # REMOVE THIS
+                                # print((move, childNode.getTotalCost(), childNode.getStringMatrix())) # REMOVE THIS
 
                                 visitedNodes.append(childNode)
                                 Q.put(childNode)
@@ -258,8 +258,7 @@ if __name__ == "__main__":
         T = PositionTree(PM)
         result = T.branchAndBound()
         result.reverse()
-
-        print()
+        
         for node in result:
             print(node.getStringMatrix())
 
