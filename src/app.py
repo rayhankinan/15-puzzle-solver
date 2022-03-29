@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, session
-from puzzle import PositionMatrix
+from puzzle import PositionMatrix, branchAndBound
 
 import sys # TEMP
 
