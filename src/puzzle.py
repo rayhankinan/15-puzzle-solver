@@ -117,6 +117,21 @@ class PositionMatrix:
 
         raise Exception("Tidak terdapat elemen kosong pada matrix!")
 
+    def getManhattanDistance(self, element):
+        for i in range(PositionMatrix.nRow):
+            for j in range(PositionMatrix.nCol):
+                if self.matrix[i][j] == element:
+                    iTarget = (element - 1) // PositionMatrix.nRow
+                    jTarget = (element - 1) % PositionMatrix.nRow
+
+                    return abs(iTarget - i) + abs(jTarget - j)
+
+        if element == PositionMatrix.nRow * PositionMatrix.nCol:
+            raise Exception("Tidak terdapat elemen kosong pada matrix!")
+
+        else:
+            raise Exception(f"Tidak terdapat elemen \"{element}\" pada matrix!")
+
     def getX(self):
         i, j = self.getIndexKosong()
 
@@ -140,7 +155,9 @@ class PositionMatrix:
         return stringMatrix
 
     def getTotalCost(self):
-        return self.currentCost + self.currentLength
+        # return self.currentCost # CARA HEURISTIK
+
+        return self.currentCost + self.currentLength # CARA A*
 
     def isReachable(self):
         return (self.getSumKurang() + self.getX()) % 2 == 0
@@ -173,11 +190,9 @@ class PositionMatrix:
             self.nextPosition[move] = other
 
             # ADD currentCost
-            N = 1
             for i in range(PositionMatrix.nRow):
                 for j in range(PositionMatrix.nCol):
-                    other.currentCost = other.currentCost + 1 if other.matrix[i][j] != N and other.matrix[i][j] != PositionMatrix.nRow * PositionMatrix.nCol else other.currentCost
-                    N += 1
+                    other.currentCost = other.currentCost + self.getManhattanDistance(self.matrix[i][j])
 
             # ADD currentLength
             other.currentLength = self.currentLength + 1
@@ -264,8 +279,8 @@ class PositionTree:
 
 if __name__ == "__main__":
     try:
-        file = open("test/bisa.txt")
-        PM = PositionMatrix.fromFile(file.read())
+        file = open("test/lama.txt", "rb")
+        PM = PositionMatrix.fromFile(file.read().decode("ASCII"))
         file.close()
 
         T = PositionTree(PM)
@@ -273,7 +288,7 @@ if __name__ == "__main__":
         
         print()
         for node in listOfNode:
-            print(node.getStringMatrix())
+            print(node)
 
         print()
         print(f"Jumlah simpul yang dibangkitkan : {N}")
