@@ -59,7 +59,7 @@ class PositionMatrix:
 
         for i in range(PositionMatrix.nRow):
             for j in range(PositionMatrix.nCol):
-                self.currentCost = self.currentCost + 1 if self.matrix[i][j] != N else self.currentCost
+                self.currentCost = self.currentCost + 1 if self.matrix[i][j] != N and self.matrix[i][j] != PositionMatrix.nRow * PositionMatrix.nCol else self.currentCost
                 N += 1
 
     # OPERATION
@@ -105,7 +105,7 @@ class PositionMatrix:
     def getX(self):
         i, j = self.getIndexKosong()
 
-        return (i + j) % 2 == 0
+        return (i + j) % 2
 
     def getStringMatrix(self):
         stringMatrix = []
@@ -124,12 +124,15 @@ class PositionMatrix:
 
         return stringMatrix
 
-    def getTotalCost(self):
-        if self.prevPosition == None:
-            return self.currentCost
+    def getTotalLength(self):
+        if self.prevPosition is None:
+            return 0
         
         else:
-            return self.currentCost + self.prevPosition.getTotalCost()
+            return 1 + self.prevPosition.getTotalLength()
+
+    def getTotalCost(self):
+        return self.currentCost + self.getTotalLength()
 
     def isReachable(self):
         return (self.getSumKurang() + self.getX()) % 2 == 0
@@ -140,12 +143,14 @@ class PositionMatrix:
             for j in range(PositionMatrix.nCol):
                 if (self.matrix[i][j] != other.matrix[i][j]):
                     return False
-
         return True
+
+    def __lt__(self, other):
+        return self.getTotalCost() < other.getTotalCost()
 
 class PositionTree:
     # STATIC ATTRIBUTE
-    moveDirection = {"BOTTOM" : (1, 0), "LEFT" : (0, -1), "UP" : (-1, 0), "RIGHT" : (0, 1)}
+    moveDirection = {"UP" : (-1, 0), "RIGHT" : (0, 1), "DOWN" : (1, 0), "LEFT" : (0, -1)}
 
     # STATIC METHOD
     def getTargetPosition():
@@ -182,27 +187,75 @@ class PositionTree:
 
         else:
             Q = PriorityQueue()
+            visitedNodes = []
 
-            Q.put((rootNode.getTotalCost(), rootNode))
+            Q.put(rootNode)
+            currentNode = None
 
             while not Q.empty():
                 currentNode = Q.get()
 
-                for move in PositionTree.moveDirection.keys():
-                    try:
-                        newNode = deepcopy(currentNode)
+                if currentNode == PositionTree.getTargetPosition():
+                    Q.queue.clear() # BUG ANTARA CLEAR SEMUA LIVE NODE ATAU KILL NODE YANG MEMILIKI TOTAL COST > CURRENTNODE
 
-                    except IndexError:
-                        pass
+                else:
+                    for move in PositionTree.moveDirection.keys():
+                        try:
+                            i, j = currentNode.getIndexKosong()
+                            deltaX, deltaY = PositionTree.moveDirection[move]
+
+                            newMatrixString = currentNode.getStringMatrix()
+                            newMatrixString[i][j], newMatrixString[i + deltaX][j + deltaY] = newMatrixString[i + deltaX][j + deltaY], newMatrixString[i][j]
+
+                            newData = ""
+
+                            for k in range(PositionMatrix.nRow):
+                                if k != PositionMatrix.nRow - 1:
+                                    newData = newData + " ".join(newMatrixString[k]) + "\n"
+                                else:
+                                    newData = newData + " ".join(newMatrixString[k])
+
+                            childNode = PositionMatrix(newData)
+
+                            childNode.prevPosition = currentNode
+                            currentNode.nextPosition[move] = childNode
+
+                            if childNode not in visitedNodes:
+                                print((move, childNode.getTotalCost(), childNode.getStringMatrix())) # REMOVE THIS
+
+                                visitedNodes.append(childNode)
+                                Q.put(childNode)     
+
+                        except IndexError:
+                            pass
+
+            if currentNode is None:
+                raise Exception("Puzzle tidak dapat diselesaikan!")
+
+            else:
+                result = []
+
+                while currentNode is not None:
+                    result.append(currentNode)
+                    currentNode = currentNode.prevPosition
+
+                return result
 
 if __name__ == "__main__":
     try:
-        data = "1 2 3 4\n5 6 - 8\n9 10 7 11\n13 14 15 12"
+        file = open("test/1.txt")
+        data = file.read()
+        file.close()
+
         PM = PositionMatrix(data)
-        print(PM.getStringMatrix())
+        print(PM.getSumKurang() + PM.getX())
 
         T = PositionTree(PM)
-        print(T.branchAndBound())
+        result = T.branchAndBound()
+        result.reverse()
+    
+        for node in result:
+            print(node.getStringMatrix())
 
     except Exception as e:
         print(e)
