@@ -4,11 +4,13 @@ from dotenv import load_dotenv
 
 import json
 import os
-import sys # TEMP
+import sys # HILANGKAN IMPORT SYS KETIKA DIKUMPULKAN
+
+load_dotenv()
 
 app = Flask(__name__)
 
-app.config["SECRET_KEY"] = os.getenv("SECRET_KEY")
+app.config["SECRET_KEY"] = os.getenv("SESSION_KEY")
 
 @app.route("/", methods = ["GET"])
 def main_page():
@@ -53,4 +55,4 @@ def delete_txt():
         return f"Bad Request: {e}", 400
 
 if __name__ == "__main__":
-    app.run(port = 3000, debug = True)
+    app.run(port = 3000, debug = True) # HILANGKAN DEBUG KETIKA DIKUMPULKAN
