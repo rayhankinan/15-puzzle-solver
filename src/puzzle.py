@@ -106,20 +106,15 @@ class PositionMatrix:
 
         raise Exception("Tidak terdapat elemen kosong pada matrix!")
 
-    def getManhattanDistance(self, element):
+    def getPerbedaanUbin(self):
+        N = 0
+        
         for i in range(PositionMatrix.nRow):
             for j in range(PositionMatrix.nCol):
-                if self.matrix[i, j] == element:
-                    iTarget = (element - 1) // PositionMatrix.nRow
-                    jTarget = (element - 1) % PositionMatrix.nRow
+                if self.matrix[i, j] != PositionMatrix.nRow * i + j + 1 and self.matrix[i, j] != PositionMatrix.nRow * PositionMatrix.nCol:
+                    N += 1
 
-                    return abs(iTarget - i) + abs(jTarget - j)
-
-        if element == PositionMatrix.nRow * PositionMatrix.nCol:
-            raise Exception("Tidak terdapat elemen kosong pada matrix!")
-
-        else:
-            raise Exception(f"Tidak terdapat elemen \"{element}\" pada matrix!")
+        return N
 
     def getX(self):
         i, j = self.getIndexKosong()
@@ -156,33 +151,35 @@ class PositionMatrix:
         i, j = other.getIndexKosong()
         deltaX, deltaY = PositionMatrix.moveDir[move]
 
-        other.matrix[i, j], other.matrix[i + deltaX, j + deltaY] = other.matrix[i + deltaX, j + deltaY], other.matrix[i, j]
+        if i + deltaX < 0 or i + deltaX >= PositionMatrix.nRow or j + deltaY < 0 or j + deltaY >= PositionMatrix.nCol:
+            raise IndexError("Invalid move.")
+        
+        else:
+            other.matrix[i, j], other.matrix[i + deltaX, j + deltaY] = other.matrix[i + deltaX, j + deltaY], other.matrix[i, j]
 
-        try:
-            # TEST DICT
-            PositionMatrix.visitedNodes[other.matrix.tobytes()]
+            try:
+                # TEST DICT
+                PositionMatrix.visitedNodes[other.matrix.tobytes()]
 
-            return None
+                return None
 
-        except KeyError:
-            # ADD prevPosition
-            other.prevPosition = self
+            except KeyError:
+                # ADD prevPosition
+                other.prevPosition = self
 
-            # ADD nextPosition
-            self.nextPosition[move] = other
+                # ADD nextPosition
+                self.nextPosition[move] = other
 
-            # ADD currentCost
-            for i in range(PositionMatrix.nRow):
-                for j in range(PositionMatrix.nCol):
-                    other.currentCost = other.currentCost + self.getManhattanDistance(self.matrix[i, j])
+                # ADD currentCost
+                other.currentCost = other.getPerbedaanUbin()
 
-            # ADD currentLength
-            other.currentLength = self.currentLength + 1
+                # ADD currentLength
+                other.currentLength = self.currentLength + 1
 
-            # ADD visitedNodes
-            PositionMatrix.visitedNodes[other.matrix.tobytes()] = other
+                # ADD visitedNodes
+                PositionMatrix.visitedNodes[other.matrix.tobytes()] = other
 
-            return other
+                return other
 
 
 class PositionTree:
@@ -204,10 +201,10 @@ class PositionTree:
         else:
             Q = PriorityQueue()
 
-            # print(("ROOT", rootNode.getStringMatrix())) # REMOVE THIS
-
             Q.put(rootNode)
             PositionMatrix.visitedNodes[rootNode.matrix.tobytes()] = rootNode
+            
+            print(len(PositionMatrix.visitedNodes), "-") # REMOVE THIS
 
             currentNode = None
 
@@ -223,7 +220,7 @@ class PositionTree:
                             childNode = currentNode << move
 
                             if childNode is not None:
-                                # print((move, childNode.getTotalCost(), childNode.getStringMatrix())) # REMOVE THIS
+                                print(len(PositionMatrix.visitedNodes), childNode.getTotalCost()) # REMOVE THIS
 
                                 Q.put(childNode)
 
