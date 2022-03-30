@@ -1,6 +1,7 @@
-from copy import deepcopy
 from queue import PriorityQueue
 from time import time
+
+import numpy as np
 
 class PositionMatrix:
     # CONSTANT ATTRIBUTE
@@ -13,25 +14,16 @@ class PositionMatrix:
 
     # STATIC METHOD
     def getEmptyMatrix():
-        matrix = [[None for j in range(PositionMatrix.nCol)] for i in range(PositionMatrix.nRow)]
+        matrix = np.array([[None for j in range(PositionMatrix.nCol)] for i in range(PositionMatrix.nRow)])
 
         return matrix
     
     def fromFile(rawString):
         # INITIALIZE legalElement
-        legalElement = []
-        N = 1
-
-        for i in range(PositionMatrix.nRow):
-            for j in range(PositionMatrix.nCol):
-                if N != PositionMatrix.nRow * PositionMatrix.nCol:
-                    legalElement.append(str(N))
-                    N += 1
-                else:
-                    legalElement.append("-")
+        legalElement = [str(i) for i in range(1, PositionMatrix.nRow * PositionMatrix.nCol + 1)]
 
         # INITIALIZE matrix
-        matrix = []
+        matrix = np.empty((PositionMatrix.nRow, PositionMatrix.nCol), int)
 
         listOfRow = rawString.split("\r\n")
 
@@ -39,23 +31,20 @@ class PositionMatrix:
             raise Exception(f"Jumlah baris pada file txt harus berjumlah 4! Jumlah baris pada file adalah {len(listOfRow)}.")
 
         else:
-            for row in listOfRow:
-                listOfElement = row.split(" ")
+            for i in range(len(listOfRow)):
+                listOfElement = listOfRow[i].split(" ")
 
                 if len(listOfElement) != PositionMatrix.nCol:
-                    raise Exception(f"Jumlah kolom pada file txt harus berjumlah 4! Terdapat kolom pada file dengan jumlah {len(row)}.")
+                    raise Exception(f"Jumlah kolom pada file txt harus berjumlah 4! Terdapat kolom pada file dengan jumlah {len(listOfElement)}.")
 
                 else:
-                    temp = []
-                    for element in listOfElement:
-                        if element not in legalElement:
-                            raise Exception(f"Terdapat elemen ilegal pada file txt! Elemen ilegal tersebut adalah \"{element}\".")
+                    for j in range(len(listOfElement)):
+                        if listOfElement[j] not in legalElement:
+                            raise Exception(f"Terdapat elemen ilegal pada file txt! Elemen ilegal tersebut adalah \"{listOfElement[j]}\".")
 
                         else:
-                            legalElement.remove(element)
-                            temp.append(int(element) if element.isnumeric() else PositionMatrix.nRow * PositionMatrix.nCol)
-
-                    matrix.append(temp)
+                            legalElement.remove(listOfElement[j])
+                            matrix[i, j] = int(listOfElement[j])
 
         return PositionMatrix(matrix)
 
@@ -83,10 +72,10 @@ class PositionMatrix:
 
         for i in range(PositionMatrix.nRow):
             for j in range(PositionMatrix.nCol):
-                if self.matrix[i][j] == N:
+                if self.matrix[i, j] == N:
                     nilaiKurang = 0
                 else:
-                    nilaiKurang = nilaiKurang + 1 if nilaiKurang != -1 and self.matrix[i][j] < N else nilaiKurang
+                    nilaiKurang = nilaiKurang + 1 if nilaiKurang != -1 and self.matrix[i, j] < N else nilaiKurang
 
         if nilaiKurang == -1:
             if N != PositionMatrix.nRow * PositionMatrix.nCol:
@@ -112,7 +101,7 @@ class PositionMatrix:
     def getIndexKosong(self):
         for i in range(PositionMatrix.nRow):
             for j in range(PositionMatrix.nCol):
-                if self.matrix[i][j] == PositionMatrix.nRow * PositionMatrix.nCol:
+                if self.matrix[i, j] == PositionMatrix.nRow * PositionMatrix.nCol:
                     return (i, j)
 
         raise Exception("Tidak terdapat elemen kosong pada matrix!")
@@ -120,7 +109,7 @@ class PositionMatrix:
     def getManhattanDistance(self, element):
         for i in range(PositionMatrix.nRow):
             for j in range(PositionMatrix.nCol):
-                if self.matrix[i][j] == element:
+                if self.matrix[i, j] == element:
                     iTarget = (element - 1) // PositionMatrix.nRow
                     jTarget = (element - 1) % PositionMatrix.nRow
 
@@ -138,21 +127,8 @@ class PositionMatrix:
         return (i + j) % 2
 
     def getStringMatrix(self):
-        stringMatrix = []
 
-        for i in range(PositionMatrix.nRow):
-            temp = []
-
-            for j in range(PositionMatrix.nCol):
-                if self.matrix[i][j] != PositionMatrix.nRow * PositionMatrix.nCol:
-                    temp.append(str(self.matrix[i][j]))
-
-                else:
-                    temp.append("-")
-
-            stringMatrix.append(temp)
-
-        return stringMatrix
+        return self.matrix.astype(str)
 
     def getTotalCost(self):
         # return self.currentCost # CARA HEURISTIK
@@ -166,7 +142,7 @@ class PositionMatrix:
     def __eq__(self, other):
         for i in range(PositionMatrix.nRow):
             for j in range(PositionMatrix.nCol):
-                if (self.matrix[i][j] != other.matrix[i][j]):
+                if self.matrix[i, j] != other.matrix[i, j]:
                     return False
         return True
 
@@ -175,12 +151,12 @@ class PositionMatrix:
 
     def __lshift__(self, move):
         # ADD matrix
-        other = PositionMatrix(deepcopy(self.matrix))
+        other = PositionMatrix(self.matrix.copy())
 
         i, j = other.getIndexKosong()
         deltaX, deltaY = PositionMatrix.moveDir[move]
 
-        other.matrix[i][j], other.matrix[i + deltaX][j + deltaY] = other.matrix[i + deltaX][j + deltaY], other.matrix[i][j]
+        other.matrix[i, j], other.matrix[i + deltaX, j + deltaY] = other.matrix[i + deltaX, j + deltaY], other.matrix[i, j]
 
         if other not in PositionMatrix.visitedNodes:
             # ADD prevPosition
@@ -192,7 +168,7 @@ class PositionMatrix:
             # ADD currentCost
             for i in range(PositionMatrix.nRow):
                 for j in range(PositionMatrix.nCol):
-                    other.currentCost = other.currentCost + self.getManhattanDistance(self.matrix[i][j])
+                    other.currentCost = other.currentCost + self.getManhattanDistance(self.matrix[i, j])
 
             # ADD currentLength
             other.currentLength = self.currentLength + 1
@@ -209,7 +185,7 @@ class PositionMatrix:
 class PositionTree:
     # CONSTANT ATTRIBUTE
     move = ["UP", "RIGHT", "DOWN", "LEFT"]
-    targetPosition = PositionMatrix([[PositionMatrix.nRow * i + j + 1 for j in range(PositionMatrix.nCol)] for i in range(PositionMatrix.nRow)])
+    targetPosition = PositionMatrix(np.array([[PositionMatrix.nRow * i + j + 1 for j in range(PositionMatrix.nCol)] for i in range(PositionMatrix.nRow)]))
 
     # CONSTRUCTOR
     def __init__(self, first):
