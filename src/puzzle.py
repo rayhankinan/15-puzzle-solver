@@ -116,6 +116,20 @@ class PositionMatrix:
 
         return N
 
+    def getManhattanDistance(self):
+        val = 0
+
+        for N in range(1, PositionMatrix.nRow * PositionMatrix.nCol):
+            for i in range(PositionMatrix.nRow):
+                for j in range(PositionMatrix.nCol):
+                    if self.matrix[i, j] == N:
+                        iTarget = (N - 1) // PositionMatrix.nRow
+                        jTarget = (N - 1) % PositionMatrix.nRow
+
+                        val += (abs(iTarget - i) + abs(jTarget - j))
+
+        return val
+
     def getX(self):
         i, j = self.getIndexKosong()
 
@@ -126,9 +140,9 @@ class PositionMatrix:
         return self.matrix.astype(str)
 
     def getTotalCost(self):
-        # return self.currentCost # CARA HEURISTIK
+        return self.currentCost # CARA HEURISTIK
 
-        return self.currentCost + self.currentLength # CARA A*
+        # return self.currentCost + self.currentLength # CARA A*
 
     def isReachable(self):
         return (self.getSumKurang() + self.getX()) % 2 == 0
@@ -171,7 +185,9 @@ class PositionMatrix:
                 self.nextPosition[move] = other
 
                 # ADD currentCost
-                other.currentCost = other.getPerbedaanUbin()
+                # other.currentCost = other.getPerbedaanUbin()
+
+                other.currentCost = other.getManhattanDistance()
 
                 # ADD currentLength
                 other.currentLength = self.currentLength + 1
@@ -204,7 +220,7 @@ class PositionTree:
             Q.put(rootNode)
             PositionMatrix.visitedNodes[rootNode.matrix.tobytes()] = rootNode
             
-            print(len(PositionMatrix.visitedNodes), "-") # REMOVE THIS
+            # print(len(PositionMatrix.visitedNodes), "-") # REMOVE THIS
 
             currentNode = None
 
@@ -220,7 +236,7 @@ class PositionTree:
                             childNode = currentNode << move
 
                             if childNode is not None:
-                                print(len(PositionMatrix.visitedNodes), childNode.getTotalCost()) # REMOVE THIS
+                                # print(len(PositionMatrix.visitedNodes), childNode.getTotalCost()) # REMOVE THIS
 
                                 Q.put(childNode)
 
@@ -255,7 +271,7 @@ class PositionTree:
 
 if __name__ == "__main__":
     try:
-        file = open("test/lama.txt", "rb")
+        file = open("test/dajjal.txt", "rb")
         PM = PositionMatrix.fromFile(file.read().decode("ASCII"))
         file.close()
 
