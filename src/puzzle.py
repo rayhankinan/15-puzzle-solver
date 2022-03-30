@@ -140,9 +140,9 @@ class PositionMatrix:
         return self.matrix.astype(str)
 
     def getTotalCost(self):
-        return self.currentCost # CARA HEURISTIK
+        # return self.currentCost # CARA HEURISTIK
 
-        # return self.currentCost + self.currentLength # CARA A*
+        return self.currentCost + self.currentLength # CARA A*
 
     def isReachable(self):
         return (self.getSumKurang() + self.getX()) % 2 == 0
@@ -185,9 +185,9 @@ class PositionMatrix:
                 self.nextPosition[move] = other
 
                 # ADD currentCost
-                # other.currentCost = other.getPerbedaanUbin()
+                other.currentCost = other.getPerbedaanUbin()
 
-                other.currentCost = other.getManhattanDistance()
+                # other.currentCost = other.getManhattanDistance()
 
                 # ADD currentLength
                 other.currentLength = self.currentLength + 1
@@ -271,7 +271,7 @@ class PositionTree:
 
 if __name__ == "__main__":
     try:
-        file = open("test/dajjal.txt", "rb")
+        file = open("test/lama2.txt", "rb")
         PM = PositionMatrix.fromFile(file.read().decode("ASCII"))
         file.close()
 

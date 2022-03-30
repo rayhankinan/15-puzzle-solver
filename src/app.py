@@ -4,6 +4,7 @@ from dotenv import load_dotenv
 
 import json
 import os
+import numpy as np
 import sys # HILANGKAN IMPORT SYS KETIKA DIKUMPULKAN
 
 load_dotenv()
@@ -15,7 +16,7 @@ app.config["SECRET_KEY"] = os.getenv("SESSION_KEY")
 @app.route("/", methods = ["GET"])
 def main_page():
     try:
-        return render_template("index.html", matrix = PositionMatrix(json.loads(session["matrix"])))
+        return render_template("index.html", matrix = PositionMatrix(np.array(json.loads(session["matrix"]))))
 
     except KeyError:
         return render_template("index.html", matrix = PositionMatrix.getEmptyMatrix())
@@ -23,7 +24,7 @@ def main_page():
 @app.route("/view", methods = ["GET"])
 def view_page():
     try:
-        PT = PositionTree(PositionMatrix(json.loads(session["matrix"])))
+        PT = PositionTree(PositionMatrix(np.array(json.loads(session["matrix"]))))
         pathOfStringMatrix, numOfNodes, executionTime = PT.calculate()
 
         return render_template("index.html", pathOfStringMatrix = pathOfStringMatrix, numOfNodes = numOfNodes, executionTime = executionTime)
@@ -35,9 +36,9 @@ def view_page():
 def upload_txt():
     try:
         file = request.files["file"]
-        session["matrix"] = json.dumps(PositionMatrix.fromFile(file.stream.read().decode("ASCII")).matrix)
+        session["matrix"] = json.dumps(PositionMatrix.fromFile(file.stream.read().decode("ASCII")).matrix.tolist())
 
-        # print(PositionMatrix(json.loads(session["matrix"])).getStringMatrix(), file=sys.stdout) # REMOVE THIS
+        print(PositionMatrix(np.array(json.loads(session["matrix"]))).getStringMatrix(), file=sys.stdout) # REMOVE THIS
 
         return "Created", 201
 

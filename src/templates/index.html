@@ -14,10 +14,14 @@
             <h1 class="header-title">15 Puzzle Solver</h1>
         </header>
         <div class="container">
-            
+            <form class="submission-form" id="submission-form" enctype="multipart/form-data">
+                <input type="file" name="file" class="file-input-button" accept=".txt" required>
+                <button type="submit" class="file-submit-button" id="file-submit-button">Upload</button>
+            </form>
         </div>
         <footer>
             
         </footer>
     </body>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/submit.js') }}"></script>
 </html>
