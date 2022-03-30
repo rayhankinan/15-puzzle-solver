@@ -10,7 +10,7 @@ class PositionMatrix:
     moveDir = {"UP" : (-1, 0), "RIGHT" : (0, 1), "DOWN" : (1, 0), "LEFT" : (0, -1)}
 
     # STATIC ATTRIBUTE
-    visitedNodes = []
+    visitedNodes = {}
 
     # STATIC METHOD
     def getEmptyMatrix():
@@ -158,7 +158,13 @@ class PositionMatrix:
 
         other.matrix[i, j], other.matrix[i + deltaX, j + deltaY] = other.matrix[i + deltaX, j + deltaY], other.matrix[i, j]
 
-        if other not in PositionMatrix.visitedNodes:
+        try:
+            # TEST DICT
+            PositionMatrix.visitedNodes[other.matrix.tobytes()]
+
+            return None
+
+        except KeyError:
             # ADD prevPosition
             other.prevPosition = self
 
@@ -174,12 +180,9 @@ class PositionMatrix:
             other.currentLength = self.currentLength + 1
 
             # ADD visitedNodes
-            PositionMatrix.visitedNodes.append(other)
+            PositionMatrix.visitedNodes[other.matrix.tobytes()] = other
 
             return other
-
-        else:
-            return None
 
 
 class PositionTree:
@@ -204,7 +207,7 @@ class PositionTree:
             # print(("ROOT", rootNode.getStringMatrix())) # REMOVE THIS
 
             Q.put(rootNode)
-            PositionMatrix.visitedNodes.append(rootNode)
+            PositionMatrix.visitedNodes[rootNode.matrix.tobytes()] = rootNode
 
             currentNode = None
 
@@ -240,7 +243,7 @@ class PositionTree:
                 return result
 
     def calculate(self):
-        PositionMatrix.visitedNodes = []
+        PositionMatrix.visitedNodes = {}
 
         startTime = time()
         rawPath = self.branchAndBound()
@@ -249,7 +252,7 @@ class PositionTree:
         pathOfStringMatrix = map(lambda T : T.getStringMatrix(), rawPath)
 
         numOfNodes = len(PositionMatrix.visitedNodes)
-        PositionMatrix.visitedNodes = []
+        PositionMatrix.visitedNodes = {}
 
         return (pathOfStringMatrix, numOfNodes, endTime - startTime)
 
@@ -263,10 +266,13 @@ if __name__ == "__main__":
         listOfNode, N, time = T.calculate()
         
         print()
+        jumlahSolusi = 0
         for node in listOfNode:
             print(node)
+            jumlahSolusi += 1
 
         print()
+        print(f"Panjang solusi : {jumlahSolusi}")
         print(f"Jumlah simpul yang dibangkitkan : {N}")
         print(f"Lama eksekusi : {time} s")
 
