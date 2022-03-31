@@ -57,9 +57,6 @@ class PositionMatrix:
         # INITIALIZE prevPosition
         self.prevPosition = None
 
-        # INITIALIZE nextPosition
-        self.nextPosition = {}
-
         # INITIALIZE currentCost
         self.currentCost = 0
 
@@ -162,9 +159,6 @@ class PositionMatrix:
             except KeyError:
                 # ADD prevPosition
                 other.prevPosition = self
-
-                # ADD nextPosition
-                self.nextPosition[move] = other
 
                 # ADD currentCost
                 if isPrevValid and not isFollowingValid:
