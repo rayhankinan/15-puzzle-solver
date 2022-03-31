@@ -66,6 +66,9 @@ class PositionMatrix:
         # INITIALIZE currentLength
         self.currentLength = 0
 
+        # INITIALIZE indexKosong
+        self.indexKosong = (-1, -1)
+
     # OPERATION
     def getKurang(self, N):
         nilaiKurang = -1
@@ -89,12 +92,10 @@ class PositionMatrix:
 
     def getSumKurang(self):
         nilaiSumKurang = 0
-        N = 1
 
         for i in range(PositionMatrix.nRow):
             for j in range(PositionMatrix.nCol):
-                nilaiSumKurang += self.getKurang(N)
-                N += 1
+                nilaiSumKurang += self.getKurang(PositionMatrix.nRow * i + j + 1)
 
         return nilaiSumKurang
 
@@ -116,60 +117,41 @@ class PositionMatrix:
 
         return N
 
-    def getManhattanDistance(self):
-        val = 0
-
-        for N in range(1, PositionMatrix.nRow * PositionMatrix.nCol):
-            for i in range(PositionMatrix.nRow):
-                for j in range(PositionMatrix.nCol):
-                    if self.matrix[i, j] == N:
-                        iTarget = (N - 1) // PositionMatrix.nRow
-                        jTarget = (N - 1) % PositionMatrix.nRow
-
-                        val += (abs(iTarget - i) + abs(jTarget - j))
-
-        return val
-
     def getX(self):
         i, j = self.getIndexKosong()
 
         return (i + j) % 2
 
     def getStringMatrix(self):
-
         return self.matrix.astype(str)
 
     def getTotalCost(self):
-        # return self.currentCost # CARA HEURISTIK
-
-        return self.currentCost + self.currentLength # CARA A*
+        return self.currentCost + self.currentLength
 
     def isReachable(self):
         return (self.getSumKurang() + self.getX()) % 2 == 0
 
     # OPERATOR OVERLOADING
     def __eq__(self, other):
-        for i in range(PositionMatrix.nRow):
-            for j in range(PositionMatrix.nCol):
-                if self.matrix[i, j] != other.matrix[i, j]:
-                    return False
-        return True
+        return self.matrix.tobytes() == other.matrix.tobytes()
 
     def __lt__(self, other):
         return self.getTotalCost() <= other.getTotalCost()
 
     def __lshift__(self, move):
-        # ADD matrix
-        other = PositionMatrix(self.matrix.copy())
-
-        i, j = other.getIndexKosong()
+        i, j = self.indexKosong
         deltaX, deltaY = PositionMatrix.moveDir[move]
 
         if i + deltaX < 0 or i + deltaX >= PositionMatrix.nRow or j + deltaY < 0 or j + deltaY >= PositionMatrix.nCol:
             raise IndexError("Invalid move.")
         
         else:
+            # ADD matrix
+            other = PositionMatrix(self.matrix.copy())
+
+            isPrevValid = other.matrix[i + deltaX, j + deltaY] == PositionMatrix.nRow * (i + deltaX) + (j + deltaY) + 1
             other.matrix[i, j], other.matrix[i + deltaX, j + deltaY] = other.matrix[i + deltaX, j + deltaY], other.matrix[i, j]
+            isFollowingValid = other.matrix[i, j] == PositionMatrix.nRow * i + j + 1
 
             try:
                 # TEST DICT
@@ -185,18 +167,23 @@ class PositionMatrix:
                 self.nextPosition[move] = other
 
                 # ADD currentCost
-                other.currentCost = other.getPerbedaanUbin()
-
-                # other.currentCost = other.getManhattanDistance()
+                if isPrevValid and not isFollowingValid:
+                    other.currentCost = self.currentCost + 1
+                elif not isPrevValid and isFollowingValid:
+                    other.currentCost = self.currentCost - 1
+                else:
+                    other.currentCost = self.currentCost
 
                 # ADD currentLength
                 other.currentLength = self.currentLength + 1
+
+                # ADD indexKosong
+                other.indexKosong = (i + deltaX, j + deltaY)
 
                 # ADD visitedNodes
                 PositionMatrix.visitedNodes[other.matrix.tobytes()] = other
 
                 return other
-
 
 class PositionTree:
     # CONSTANT ATTRIBUTE
@@ -206,6 +193,8 @@ class PositionTree:
     # CONSTRUCTOR
     def __init__(self, first):
         self.first = first
+        self.first.currentCost = self.first.getPerbedaanUbin()
+        self.first.indexKosong = self.first.getIndexKosong()
 
     # OPERATION
     def branchAndBound(self):
