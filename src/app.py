@@ -16,10 +16,10 @@ app.config["SECRET_KEY"] = os.getenv("SESSION_KEY")
 @app.route("/", methods = ["GET"])
 def main_page():
     try:
-        return render_template("index.html", matrix = PositionMatrix(np.array(json.loads(session["matrix"]))))
+        return render_template("index.html", matrix = PositionMatrix(np.array(json.loads(session["matrix"]))).getStringMatrix(), nRow = PositionMatrix.nRow, nCol = PositionMatrix.nCol)
 
     except KeyError:
-        return render_template("index.html", matrix = PositionMatrix.getEmptyMatrix())
+        return render_template("index.html", matrix = PositionMatrix.getEmptyMatrix(), nRow = PositionMatrix.nRow, nCol = PositionMatrix.nCol)
 
 @app.route("/view", methods = ["GET"])
 def view_page():
@@ -43,6 +43,8 @@ def upload_txt():
         return "Created", 201
 
     except Exception as e:
+        session.pop("matrix", None)
+
         return f"Bad Request: {e}", 400
 
 @app.route("/clear", methods = ["DELETE"])

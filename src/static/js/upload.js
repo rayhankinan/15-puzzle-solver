@@ -8,11 +8,12 @@ $(document).ready(() => {
             url: "/upload",
             contentType: false,
             processData: false,
-            success: () => {
-                $(".submission-form").trigger("reset")
-            },
+            async: false,
             error: () => {
-                $(".submission-form").trigger("reset")
+                alert("Upload fail!")
+            },
+            success: () => {
+                window.location.replace("/")
             }
         })
     })

@@ -3,7 +3,11 @@ $(document).ready(() => {
         $.ajax({
             type: "DELETE",
             url: "/clear",
-            complete: () => {
+            async: false,
+            error: () => {
+                alert("Clear fail!")
+            },
+            success: () => {
                 window.location.replace("/")
             }
         })

@@ -24,7 +24,13 @@
             <button type="button" class="file-clear-button">Clear</button>
             <button type="button" class="calculate-button">Calculate</button>
             <table>
-                
+                {% for i in range(nRow) %}
+                    <tr>
+                        {% for j in range(nCol)%}
+                            <td>{{ matrix[i, j] }}</td>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
             </table>
         </div>
         <footer>
