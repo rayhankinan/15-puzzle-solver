@@ -150,13 +150,10 @@ class PositionMatrix:
             other.matrix[i, j], other.matrix[i + deltaX, j + deltaY] = other.matrix[i + deltaX, j + deltaY], other.matrix[i, j]
             isFollowingValid = other.matrix[i, j] == PositionMatrix.nRow * i + j + 1
 
-            try:
-                # TEST DICT
-                PositionMatrix.visitedNodes[other.matrix.tobytes()]
-
+            if other.matrix.tobytes() in PositionMatrix.visitedNodes:
                 return None
 
-            except KeyError:
+            else:
                 # ADD prevPosition
                 other.prevPosition = self
 
