@@ -271,7 +271,7 @@ class PositionTree:
 
 if __name__ == "__main__":
     try:
-        file = open("test/lama2.txt", "rb")
+        file = open("test/lama3.txt", "rb")
         PM = PositionMatrix.fromFile(file.read().decode("ASCII"))
         file.close()
 

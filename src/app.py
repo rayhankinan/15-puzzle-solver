@@ -50,13 +50,9 @@ def delete_txt():
     try:
         session.pop("matrix", None)
 
-        print("YUHU BERHASIL DELETE", file=sys.stdout) # REMOVE THIS
-
         return "OK", 200
 
     except Exception as e:
-        print("YUHU TIDAK BERHASIL DELETE", file=sys.stdout) # REMOVE THIS
-
         return f"Bad Request: {e}", 400
 
 if __name__ == "__main__":

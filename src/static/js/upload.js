@@ -13,9 +13,6 @@ $(document).ready(() => {
             },
             error: () => {
                 $(".submission-form").trigger("reset")
-            },
-            complete: () => {
-                window.location.replace("/view")
             }
         })
     })
