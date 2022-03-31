@@ -27,10 +27,10 @@ def view_page():
         PT = PositionTree(PositionMatrix(np.array(json.loads(session["matrix"]))))
         pathOfStringMatrix, numOfNodes, executionTime = PT.calculate()
 
-        return render_template("index.html", pathOfStringMatrix = pathOfStringMatrix, numOfNodes = numOfNodes, executionTime = executionTime)
+        return render_template("view.html", pathOfStringMatrix = pathOfStringMatrix, numOfNodes = numOfNodes, executionTime = executionTime)
 
     except KeyError:
-        return render_template("index.html", path = [], numOfNodes = 0, executionTime = 0)
+        return render_template("view.html", path = [], numOfNodes = 0, executionTime = 0)
 
 @app.route("/upload", methods = ["POST"])
 def upload_txt():
@@ -50,9 +50,13 @@ def delete_txt():
     try:
         session.pop("matrix", None)
 
+        print("YUHU BERHASIL DELETE", file=sys.stdout) # REMOVE THIS
+
         return "OK", 200
 
     except Exception as e:
+        print("YUHU TIDAK BERHASIL DELETE", file=sys.stdout) # REMOVE THIS
+
         return f"Bad Request: {e}", 400
 
 if __name__ == "__main__":
