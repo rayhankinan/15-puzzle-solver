@@ -25,12 +25,12 @@ def main_page():
 def view_page():
     try:
         PT = PositionTree(PositionMatrix(np.array(json.loads(session["matrix"]))))
-        pathOfStringMatrix, numOfNodes, executionTime = PT.calculate()
+        sumKurangPlusX, pathOfStringMatrix, numOfNodes, executionTime = PT.calculate()
 
-        return render_template("view.html", pathOfStringMatrix = pathOfStringMatrix, numOfNodes = numOfNodes, executionTime = executionTime)
+        return render_template("view.html", sumKurangPlusX = sumKurangPlusX, pathOfStringMatrix = pathOfStringMatrix, numOfNodes = numOfNodes, executionTime = executionTime)
 
     except KeyError:
-        return render_template("view.html", path = [], numOfNodes = 0, executionTime = 0)
+        return render_template("view.html", sumKurangPlusX = 0, pathOfStringMatrix = [], numOfNodes = 0, executionTime = 0)
 
 @app.route("/upload", methods = ["POST"])
 def upload_txt():

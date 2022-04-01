@@ -49,7 +49,7 @@ class PositionMatrix:
             PM = PositionMatrix(matrix)
 
             if not PM.isReachable():
-                raise Exception(f"Puzzle tidak dapat diselesaikan! (sum KURANG + X = {PM.getSumKurang() + PM.getX()})")
+                raise Exception(f"Puzzle tidak dapat diselesaikan! (SUM KURANG + X = {PM.getSumKurang() + PM.getX()})")
 
             else:
                 return PM
@@ -190,7 +190,7 @@ class PositionTree:
     # CONSTRUCTOR
     def __init__(self, first):
         if not first.isReachable():
-            raise Exception(f"Puzzle tidak dapat diselesaikan! (sum KURANG + X = {first.getSumKurang() + first.getX()})")
+            raise Exception(f"Puzzle tidak dapat diselesaikan! (SUM KURANG + X = {first.getSumKurang() + first.getX()})")
 
         else:
             self.first = first
@@ -239,6 +239,8 @@ class PositionTree:
     def calculate(self):
         PositionMatrix.visitedNodes = {}
 
+        sumKurangPlusX = self.first.getSumKurang() + self.first.getX()
+
         startTime = time()
         rawPath = self.branchAndBound()
         endTime = time()
@@ -248,11 +250,11 @@ class PositionTree:
         numOfNodes = len(PositionMatrix.visitedNodes)
         PositionMatrix.visitedNodes = {}
 
-        return (pathOfStringMatrix, numOfNodes, endTime - startTime)
+        return (sumKurangPlusX, pathOfStringMatrix, numOfNodes, endTime - startTime)
 
 if __name__ == "__main__":
     try:
-        file = open("test/dajjal.txt", "rb")
+        file = open("test/bisa3.txt", "rb")
         PM = PositionMatrix.fromFile(file.read().decode("ASCII"))
         file.close()
 
