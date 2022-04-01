@@ -17,21 +17,21 @@
             <h1 class="header-title">15 Puzzle Solver</h1>
         </header>
         <div class="container">
+            <table class="puzzle-table">
+                {% for i in range(nRow) %}
+                    <tr>
+                        {% for j in range(nCol)%}
+                            <td>{{ matrix[i, j] if matrix[i, j] != None else "-" }}</td>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+            </table>
             <form class="submission-form" enctype="multipart/form-data">
                 <input type="file" name="file" class="file-input-button" accept=".txt" required>
                 <button type="submit" class="file-submit-button">Upload</button>
             </form>
             <button type="button" class="file-clear-button">Clear</button>
             <button type="button" class="calculate-button">Calculate</button>
-            <table class="puzzle-table">
-                {% for i in range(nRow) %}
-                    <tr>
-                        {% for j in range(nCol)%}
-                            <td>{{ matrix[i, j] }}</td>
-                        {% endfor %}
-                    </tr>
-                {% endfor %}
-            </table>
         </div>
         <footer>
             <p>Made by 13520065 Rayhan Kinan Muhannad</p>
