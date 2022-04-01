@@ -18,18 +18,21 @@
             {% for matrix in pathOfStringMatrix %}
                 <table class="puzzle-table">
                     {% for i in range(nRow) %}
-                        <tr>
+                        <tr class="row">
                             {% for j in range(nCol)%}
-                                <td>{{ matrix[i, j] if matrix[i, j] != None else "-" }}</td>
+                                <td class="element">{{ matrix[i, j] if matrix[i, j] != None else "-" }}</td>
                             {% endfor %}
                         </tr>
                     {% endfor %}
                 </table>
             {% endfor %}
+            <p class="jumlah-kurang-x-label">Jumlah KURANG + X : {{ sumKurangPlusX }}</p>
+            <p class="jumlah-node-label">Jumlah simpul yang dibangkitkan : {{ numOfNodes }}</p>
+            <p class="waktu-eksekusi-label">Waktu eksekusi : {{ executionTime }} s</p>
             <button type="button" class="back-button">Back</button>
         </div>
         <footer>
-            <p>Made by 13520065 Rayhan Kinan Muhannad</p>
+            <p class="footer-label">Made by 13520065 Rayhan Kinan Muhannad</p>
         </footer>
     </body>
 </html>

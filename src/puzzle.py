@@ -250,16 +250,18 @@ class PositionTree:
         numOfNodes = len(PositionMatrix.visitedNodes)
         PositionMatrix.visitedNodes = {}
 
-        return (sumKurangPlusX, pathOfStringMatrix, numOfNodes, endTime - startTime)
+        executionTime = endTime - startTime
+
+        return (sumKurangPlusX, pathOfStringMatrix, numOfNodes, executionTime)
 
 if __name__ == "__main__":
     try:
-        file = open("test/bisa3.txt", "rb")
+        file = open("test/lama3.txt", "rb")
         PM = PositionMatrix.fromFile(file.read().decode("ASCII"))
         file.close()
 
         T = PositionTree(PM)
-        listOfNode, N, time = T.calculate()
+        sumKurangPlusX, listOfNode, N, time = T.calculate()
         
         print()
         jumlahSolusi = 0
