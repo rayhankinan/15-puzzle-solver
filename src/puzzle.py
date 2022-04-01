@@ -46,7 +46,13 @@ class PositionMatrix:
                             legalElement.remove(listOfElement[j])
                             matrix[i, j] = int(listOfElement[j])
 
-        return PositionMatrix(matrix)
+            PM = PositionMatrix(matrix)
+
+            if not PM.isReachable():
+                raise Exception(f"Puzzle tidak dapat diselesaikan! (sum KURANG + X = {PM.getSumKurang() + PM.getX()})")
+
+            else:
+                return PM
 
     # CONSTRUCTOR
     def __init__(self, data):
@@ -183,57 +189,52 @@ class PositionTree:
 
     # CONSTRUCTOR
     def __init__(self, first):
-        self.first = first
-        self.first.currentCost = self.first.getPerbedaanUbin()
-        self.first.indexKosong = self.first.getIndexKosong()
+        if not first.isReachable():
+            raise Exception(f"Puzzle tidak dapat diselesaikan! (sum KURANG + X = {first.getSumKurang() + first.getX()})")
+
+        else:
+            self.first = first
+            self.first.currentCost = self.first.getPerbedaanUbin()
+            self.first.indexKosong = self.first.getIndexKosong()
 
     # OPERATION
     def branchAndBound(self):
         rootNode = self.first
+    
+        Q = PriorityQueue()
+
+        Q.put(rootNode)
+        PositionMatrix.visitedNodes[rootNode.matrix.tobytes()] = rootNode
         
-        if not rootNode.isReachable():
-            raise Exception("Puzzle tidak dapat diselesaikan!")
+        # print(len(PositionMatrix.visitedNodes), "-") # REMOVE THIS
 
-        else:
-            Q = PriorityQueue()
+        currentNode = None
 
-            Q.put(rootNode)
-            PositionMatrix.visitedNodes[rootNode.matrix.tobytes()] = rootNode
-            
-            # print(len(PositionMatrix.visitedNodes), "-") # REMOVE THIS
+        while not Q.empty():
+            currentNode = Q.get()
 
-            currentNode = None
-
-            while not Q.empty():
-                currentNode = Q.get()
-
-                if currentNode == PositionTree.targetPosition:
-                    Q.queue.clear()
-
-                else:
-                    for move in PositionTree.move:
-                        try:
-                            childNode = currentNode << move
-
-                            if childNode is not None:
-                                # print(len(PositionMatrix.visitedNodes), childNode.getTotalCost()) # REMOVE THIS
-
-                                Q.put(childNode)
-
-                        except IndexError:
-                            pass
-
-            if currentNode is None:
-                raise Exception("Puzzle tidak dapat diselesaikan!")
+            if currentNode == PositionTree.targetPosition:
+                Q.queue.clear()
 
             else:
-                result = []
+                for move in PositionTree.move:
+                    try:
+                        childNode = currentNode << move
 
-                while currentNode is not None:
-                    result.insert(0, currentNode)
-                    currentNode = currentNode.prevPosition
+                        if childNode is not None:
+                            # print(len(PositionMatrix.visitedNodes), childNode.getTotalCost()) # REMOVE THIS
 
-                return result
+                            Q.put(childNode)
+
+                    except IndexError:
+                        pass
+
+        result = []
+        while currentNode is not None:
+            result.insert(0, currentNode)
+            currentNode = currentNode.prevPosition
+
+        return result
 
     def calculate(self):
         PositionMatrix.visitedNodes = {}
@@ -251,7 +252,7 @@ class PositionTree:
 
 if __name__ == "__main__":
     try:
-        file = open("test/lama3.txt", "rb")
+        file = open("test/dajjal.txt", "rb")
         PM = PositionMatrix.fromFile(file.read().decode("ASCII"))
         file.close()
 

@@ -9,8 +9,8 @@ $(document).ready(() => {
             contentType: false,
             processData: false,
             async: false,
-            error: () => {
-                alert("Upload fail!")
+            error: (jqXHR) => {
+                alert(jqXHR.responseText)
             },
             success: () => {
                 window.location.replace("/")

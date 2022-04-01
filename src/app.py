@@ -45,7 +45,7 @@ def upload_txt():
     except Exception as e:
         session.pop("matrix", None)
 
-        return f"Bad Request: {e}", 400
+        return str(e), 400
 
 @app.route("/clear", methods = ["DELETE"])
 def delete_txt():
@@ -55,7 +55,7 @@ def delete_txt():
         return "OK", 200
 
     except Exception as e:
-        return f"Bad Request: {e}", 400
+        return str(e), 400
 
 if __name__ == "__main__":
     app.run(port = 3000, debug = True) # HILANGKAN DEBUG KETIKA DIKUMPULKAN
