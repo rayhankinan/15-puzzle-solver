@@ -1,17 +1,14 @@
 from flask import Flask, render_template, request, session
 from puzzle import PositionMatrix, PositionTree
-from dotenv import load_dotenv
 
 import json
-import os
+import secrets
 import numpy as np
 import sys # HILANGKAN IMPORT SYS KETIKA DIKUMPULKAN
 
-load_dotenv()
-
 app = Flask(__name__)
 
-app.config["SECRET_KEY"] = os.getenv("SESSION_KEY")
+app.config["SECRET_KEY"] = secrets.token_urlsafe()
 
 @app.route("/", methods = ["GET"])
 def main_page():
