@@ -1,5 +1,5 @@
 # 15-puzzle-solver
-Disusun untuk memenuhi Tugas Kecil 3 IF2211 Strategi Algoritma "Penyelesaian Persoalan 15-Puzzle dengan Algoritma Branch and Bound"
+Disusun untuk memenuhi Tugas Kecil 3 IF2211 Strategi Algoritma "Penyelesaian Persoalan 15-*Puzzle* dengan Algoritma *Branch and Bound*"
 
 ## Daftar Isi
 * [Deskripsi Singkat Program](#deskripsi-singkat-program)
@@ -7,6 +7,7 @@ Disusun untuk memenuhi Tugas Kecil 3 IF2211 Strategi Algoritma "Penyelesaian Per
 * [Requirement Program](#requirement-program)
 * [Cara Menyiapkan *Environment*](#cara-menyiapkan-environment)
 * [Cara Menjalankan Program](#cara-menjalankan-program)
+* [Cara Menggunakan Program](#cara-menggunakan-program)
 * [Author](#author)
 
 ## Deskripsi Singkat Program
@@ -65,6 +66,12 @@ Disusun untuk memenuhi Tugas Kecil 3 IF2211 Strategi Algoritma "Penyelesaian Per
 1. Pastikan sudah menyiapkan *environment* program serta mesin eksekusi terhubung dengan internet.
 2. Jalankan program `app.py` dengan menjalankan perintah `py app.py` pada *command prompt* pada folder `src`.
 3. Jika berhasil dijalankan, maka akan terdapat *window* Python pada komputer.
+
+## Cara Menggunakan Program
+1. *Upload* file `.txt` sesuai dengan format yang terdapat pada folder `test`.
+2. Tekan tombol *Calculate* pada program.
+3. Tunggu hingga program berhasil menemukan jawaban dari *puzzle*.
+4. Kemudian, program akan menunjukkan *step-by-step* yang dibutuhkan untuk mendapatkan solusi.
 
 ## Author
 * Nama: Rayhan Kinan Muhannad
