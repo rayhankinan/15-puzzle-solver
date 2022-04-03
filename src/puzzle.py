@@ -202,8 +202,6 @@ class PositionTree:
 
         Q.put(rootNode)
         PositionMatrix.visitedNodes[rootNode.matrix.tobytes()] = rootNode
-        
-        # print(len(PositionMatrix.visitedNodes), "-") # REMOVE THIS
 
         currentNode = None
 
@@ -219,8 +217,6 @@ class PositionTree:
                         childNode = currentNode << move
 
                         if childNode is not None:
-                            # print(len(PositionMatrix.visitedNodes), childNode.getTotalCost()) # REMOVE THIS
-
                             Q.put(childNode)
 
                     except IndexError:
@@ -248,26 +244,3 @@ class PositionTree:
         executionTime = round(endTime - startTime, 2)
 
         return (sumKurangPlusX, pathOfMatrix, numOfNodes, executionTime)
-
-if __name__ == "__main__":
-    try:
-        file = open("test/lama3.txt", "rb")
-        PM = PositionMatrix.fromFile(file.read().decode("ASCII"))
-        file.close()
-
-        T = PositionTree(PM)
-        sumKurangPlusX, listOfNode, N, time = T.calculate()
-        
-        print()
-        jumlahSolusi = 0
-        for node in listOfNode:
-            print(node)
-            jumlahSolusi += 1
-
-        print()
-        print(f"Panjang solusi : {jumlahSolusi}")
-        print(f"Jumlah simpul yang dibangkitkan : {N}")
-        print(f"Lama eksekusi : {time} s")
-
-    except Exception as e:
-        print(e)
