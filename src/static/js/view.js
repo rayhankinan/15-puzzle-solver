@@ -103,10 +103,12 @@ $(".board").ready(() => {
             alert(jqXHR.responseText)
         },
         success: (data) => {
+            // FIRST ITERATION
             createBtns(data.nRow, data.nCol)
             createBoard(data.pathOfMatrix[0], data.nRow, data.nCol)
             updateBtns(data.nRow, data.nCol)
             
+            // OTHER ITERATION
             let index = 1
             let interval = setInterval(() => {
                 if (index == data.pathOfMatrix.length) {
@@ -118,6 +120,11 @@ $(".board").ready(() => {
                     index++
                 }
             }, 500)
+
+            // OTHER ATTRIBUTE
+            ("#nilai-kurang-x-label").html(`Nilai dari KURANG(i) + X : ${data.sumKurangPlusX}`)
+            ("#jumlah-node-label").html(`Jumlah simpul yang dibangkitkan : ${data.numOfNodes}`)
+            ("#waktu-eksekusi-label").html(`Waktu eksekusi : ${executionTime} s`)
         }
     })
 })
