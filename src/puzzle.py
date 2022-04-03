@@ -40,7 +40,7 @@ class PositionMatrix:
                 else:
                     for j in range(len(listOfElement)):
                         if listOfElement[j] not in legalElement:
-                            raise Exception(f"Terdapat elemen ilegal pada file txt! Elemen ilegal tersebut adalah \"{listOfElement[j]}\".")
+                            raise Exception(f"Terdapat elemen ilegal pada file txt! Elemen ilegal tersebut adalah {listOfElement[j]}.")
 
                         else:
                             legalElement.remove(listOfElement[j])
@@ -85,7 +85,7 @@ class PositionMatrix:
 
         if nilaiKurang == -1:
             if N != PositionMatrix.nRow * PositionMatrix.nCol:
-                raise Exception(f"Tidak terdapat elemen \"{N}\" pada matrix!")
+                raise Exception(f"Tidak terdapat elemen {N} pada matrix!")
 
             else:
                 raise Exception("Tidak terdapat elemen kosong pada matrix!")
