@@ -29,18 +29,7 @@ def display_matrix():
     except KeyError:
         return jsonify(matrix = PositionTree.targetPosition.matrix.tolist(), nRow = PositionMatrix.nRow, nCol = PositionMatrix.nCol)
 
-@app.route("/calculate",  methods = ["GET"])
-def calculate_matrix():
-    try:
-        PT = PositionTree(PositionMatrix(np.array(json.loads(session["matrix"]))))
-        sumKurangPlusX, pathOfMatrix, numOfNodes, executionTime = PT.calculate()
-
-        return jsonify(sumKurangPlusX = sumKurangPlusX, pathOfMatrix = pathOfMatrix, numOfNodes = numOfNodes, executionTime = executionTime, nRow = PositionMatrix.nRow, nCol = PositionMatrix.nCol)
-
-    except KeyError:
-        return "Please upload a txt file first!", 400
-
-@app.route("/upload", methods = ["POST"])
+@app.route("/upload_txt", methods = ["POST"])
 def upload_txt():
     try:
         file = request.files["file"]
@@ -49,8 +38,6 @@ def upload_txt():
         return "Created", 201
 
     except Exception as e:
-        session.pop("matrix", None)
-
         return str(e), 400
 
 @app.route("/clear", methods = ["DELETE"])
@@ -63,7 +50,30 @@ def delete_txt():
     except Exception as e:
         return str(e), 400
 
+@app.route("/calculate",  methods = ["GET"])
+def calculate_matrix():
+    try:
+        PT = PositionTree(PositionMatrix(np.array(json.loads(session["matrix"]))))
+        sumKurangPlusX, pathOfMatrix, numOfNodes, executionTime = PT.calculate()
+
+        return jsonify(sumKurangPlusX = sumKurangPlusX, pathOfMatrix = pathOfMatrix, numOfNodes = numOfNodes, executionTime = executionTime, nRow = PositionMatrix.nRow, nCol = PositionMatrix.nCol)
+
+    except KeyError:
+        return "Please upload a txt file first!", 400
+
+@app.route("/upload_json", methods = ["POST"])
+def process_matrix():
+    try:
+        data = request.get_json()
+
+        session["matrix"] = json.dumps(data)
+
+        return "Created", 201
+
+    except Exception as e:
+        return str(e), 400
+
 if __name__ == "__main__":
     icondir = os.path.join(os.path.dirname(__file__), "static/images/logo.png")
 
-    init_gui(app, port=3000, window_title="15 Puzzle Solver", icon=icondir)
+    init_gui(app, port = 3000, window_title = "15 Puzzle Solver", icon = icondir)

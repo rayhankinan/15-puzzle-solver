@@ -115,7 +115,7 @@ $(document).ready(() => {
         $.ajax({
             data: formData,
             type: "POST",
-            url: "/upload",
+            url: "/upload_txt",
             contentType: false,
             processData: false,
             error: (jqXHR) => {
@@ -141,6 +141,17 @@ $(document).ready(() => {
     })
 
     $(".calculate-button").click(() => {
-        window.location.replace("/view")
+        $.ajax({
+            type: "POST",
+            url: "/upload_json",
+            data: JSON.stringify(board),
+            contentType: "application/json",
+            error: (jqXHR) => {
+                alert(jqXHR.responseText)
+            },
+            success: () => {
+                window.location.replace("/view")
+            }
+        })
     })
 })
