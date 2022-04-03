@@ -20,16 +20,14 @@ const updateBtns = (nRow, nCol) => {
     for (let i = 0; i < nRow; i++) {
         for (let j = 0; j < nCol; j++) {
             const id = `btn${i * nCol + j}`
-            const b = document.getElementById(id)
-            v = board[i][j]
 
             if (board[i][j] < nRow * nCol) {
-                b.innerHTML = board[i][j]
-                b.className = "button"
+                $(`#${id}`).html(board[i][j])
+                $(`#${id}`).attr("class", "button")
 
             } else {
-                b.innerHTML = ""
-                b.className = "empty"
+                $(`#${id}`).html("")
+                $(`#${id}`).attr("class", "empty")
             }
         }
     }
@@ -49,12 +47,12 @@ const btnHandle = (event) => {
     }
 
     if (p > -1) {
-        const t = possibles[p];
+        const t = possibles[p]
 
-        board[zx][zy] = board[t.x][t.y];
-        zx = t.x;
-        zy = t.y;
-        board[zx][zy] = nRow * nCol;
+        board[zx][zy] = board[t.x][t.y]
+        zx = t.x
+        zy = t.y
+        board[zx][zy] = nRow * nCol
         
         updateBtns(nRow, nCol)
     }

@@ -31,13 +31,15 @@ def display_matrix():
 @app.route("/calculate",  methods = ["GET"])
 def calculate_matrix():
     try:
+        print(PositionMatrix(np.array(json.loads(session["matrix"]))).matrix, file=sys.stdout) # REMOVE THIS
+
         PT = PositionTree(PositionMatrix(np.array(json.loads(session["matrix"]))))
-        sumKurangPlusX, pathOfMatrixNP, numOfNodes, executionTime = PT.calculate()
+        sumKurangPlusX, pathOfMatrix, numOfNodes, executionTime = PT.calculate()
 
-        return jsonify(sumKurangPlusX = sumKurangPlusX, pathOfMatrix = pathOfMatrixNP.tolist(), numOfNodes = numOfNodes, executionTime = executionTime, nRow = PositionMatrix.nRow, nCol = PositionMatrix.nCol)
+        return jsonify(sumKurangPlusX = sumKurangPlusX, pathOfMatrix = pathOfMatrix, numOfNodes = numOfNodes, executionTime = executionTime, nRow = PositionMatrix.nRow, nCol = PositionMatrix.nCol)
 
-    except:
-        return jsonify(sumKurangPlusX = 0, pathOfStringMatrix = [], numOfNodes = 0, executionTime = 0, nRow = PositionMatrix.nRow, nCol = PositionMatrix.nCol)
+    except KeyError:
+        return "Please input file .txt", 400
 
 @app.route("/upload", methods = ["POST"])
 def upload_txt():

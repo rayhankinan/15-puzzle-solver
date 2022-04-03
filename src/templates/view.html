@@ -7,7 +7,7 @@
         <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/stylesheet.css') }}">
         <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/logo.png') }}">
         <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-        <script type="text/javascript" src="{{ url_for('static', filename='js/back.js') }}"></script>
+        <script type="text/javascript" src="{{ url_for('static', filename='js/view.js') }}"></script>
     </head>
     <body>
         <header>
@@ -15,20 +15,10 @@
             <h1 class="header-title">15 Puzzle Solver</h1>
         </header>
         <div class="container">
-            {% for matrix in pathOfStringMatrix %}
-                <table class="puzzle-table">
-                    {% for i in range(nRow) %}
-                        <tr class="row">
-                            {% for j in range(nCol)%}
-                                <td class="element">{{ matrix[i, j] if matrix[i, j] != None else "-" }}</td>
-                            {% endfor %}
-                        </tr>
-                    {% endfor %}
-                </table>
-            {% endfor %}
-            <p class="jumlah-kurang-x-label">Jumlah KURANG + X : {{ sumKurangPlusX }}</p>
-            <p class="jumlah-node-label">Jumlah simpul yang dibangkitkan : {{ numOfNodes }}</p>
-            <p class="waktu-eksekusi-label">Waktu eksekusi : {{ executionTime }} s</p>
+            <div class="board"></div>
+            <p class="jumlah-kurang-x-label"></p>
+            <p class="jumlah-node-label"></p>
+            <p class="waktu-eksekusi-label"></p>
             <button type="button" class="back-button">Back</button>
         </div>
         <footer>

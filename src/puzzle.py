@@ -228,7 +228,7 @@ class PositionTree:
 
         result = []
         while currentNode is not None:
-            result.insert(0, currentNode)
+            result.insert(0, currentNode.matrix.tolist())
             currentNode = currentNode.prevPosition
 
         return result
@@ -239,7 +239,7 @@ class PositionTree:
         sumKurangPlusX = self.first.getSumKurang() + self.first.getX()
 
         startTime = time()
-        rawPath = self.branchAndBound()
+        pathOfMatrix = self.branchAndBound()
         endTime = time()
 
         numOfNodes = len(PositionMatrix.visitedNodes)
@@ -247,11 +247,11 @@ class PositionTree:
 
         executionTime = endTime - startTime
 
-        return (sumKurangPlusX, rawPath, numOfNodes, executionTime)
+        return (sumKurangPlusX, pathOfMatrix, numOfNodes, executionTime)
 
 if __name__ == "__main__":
     try:
-        file = open("test/lama3.txt", "rb")
+        file = open("test/bisa.txt", "rb")
         PM = PositionMatrix.fromFile(file.read().decode("ASCII"))
         file.close()
 
