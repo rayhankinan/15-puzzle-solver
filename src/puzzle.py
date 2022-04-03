@@ -245,13 +245,13 @@ class PositionTree:
         numOfNodes = len(PositionMatrix.visitedNodes)
         PositionMatrix.visitedNodes = {}
 
-        executionTime = endTime - startTime
+        executionTime = round(endTime - startTime, 2)
 
         return (sumKurangPlusX, pathOfMatrix, numOfNodes, executionTime)
 
 if __name__ == "__main__":
     try:
-        file = open("test/bisa.txt", "rb")
+        file = open("test/lama3.txt", "rb")
         PM = PositionMatrix.fromFile(file.read().decode("ASCII"))
         file.close()
 
