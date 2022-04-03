@@ -14,11 +14,6 @@ button {
     cursor: pointer;
 }
 
-a {
-    text-decoration: none;
-    color: #feffff;
-}
-
 /* HEADER */
 
 header {
@@ -31,11 +26,6 @@ header {
     border-bottom: 5px solid #111;
     display: flex;
     flex-direction: row;
-}
-
-.header-logo {
-    margin-left: 20px;
-    line-height: 90px;
 }
 
 .header-title {

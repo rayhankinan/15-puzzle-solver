@@ -1,10 +1,12 @@
 from flask import Flask, render_template, request, session, jsonify
 from puzzle import PositionMatrix, PositionTree
+from pyfladesk import init_gui
 
 import json
 import secrets
+import os
 import numpy as np
-import sys # HILANGKAN IMPORT SYS KETIKA DIKUMPULKAN
+# import sys # HILANGKAN IMPORT SYS KETIKA DIKUMPULKAN
 
 app = Flask(__name__)
 
@@ -31,7 +33,7 @@ def display_matrix():
 @app.route("/calculate",  methods = ["GET"])
 def calculate_matrix():
     try:
-        print(PositionMatrix(np.array(json.loads(session["matrix"]))).matrix, file=sys.stdout) # REMOVE THIS
+        # print(PositionMatrix(np.array(json.loads(session["matrix"]))).matrix, file=sys.stdout) # REMOVE THIS
 
         PT = PositionTree(PositionMatrix(np.array(json.loads(session["matrix"]))))
         sumKurangPlusX, pathOfMatrix, numOfNodes, executionTime = PT.calculate()
@@ -47,7 +49,7 @@ def upload_txt():
         file = request.files["file"]
         session["matrix"] = json.dumps(PositionMatrix.fromFile(file.stream.read().decode("ASCII")).matrix.tolist())
 
-        print(PositionMatrix(np.array(json.loads(session["matrix"]))).matrix, file=sys.stdout) # REMOVE THIS
+        # print(PositionMatrix(np.array(json.loads(session["matrix"]))).matrix, file=sys.stdout) # REMOVE THIS
 
         return "Created", 201
 
@@ -67,4 +69,7 @@ def delete_txt():
         return str(e), 400
 
 if __name__ == "__main__":
-    app.run(port = 3000, debug = True) # HILANGKAN DEBUG KETIKA DIKUMPULKAN
+    # app.run(port = 3000, debug = True) # HILANGKAN DEBUG KETIKA DIKUMPULKAN
+    icondir = os.path.join(os.path.dirname(__file__), "static/images/logo.png")
+    
+    init_gui(app, port=3000, window_title="15 Puzzle Solver", icon=icondir)
