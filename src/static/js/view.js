@@ -105,7 +105,6 @@ $(document).ready(() => {
         type: "GET",
         url: "/calculate",
         contentType:"application/json; charset=utf-8",
-        async: false,
         error: (jqXHR) => {
             alert(jqXHR.responseText)
         },

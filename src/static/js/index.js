@@ -99,7 +99,6 @@ $(document).ready(() => {
         type: "GET",
         url: "/display",
         contentType:"application/json; charset=utf-8",
-        async: false,
         error: (jqXHR) => {
             alert(jqXHR.responseText)
         },
@@ -119,7 +118,6 @@ $(document).ready(() => {
             url: "/upload",
             contentType: false,
             processData: false,
-            async: false,
             error: (jqXHR) => {
                 alert(jqXHR.responseText)
             },
@@ -133,7 +131,6 @@ $(document).ready(() => {
         $.ajax({
             type: "DELETE",
             url: "/clear",
-            async: false,
             error: (jqXHR) => {
                 alert(jqXHR.responseText)
             },
