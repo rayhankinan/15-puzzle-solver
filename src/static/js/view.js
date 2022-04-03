@@ -107,8 +107,12 @@ $(document).ready(() => {
         contentType:"application/json; charset=utf-8",
         error: (jqXHR) => {
             alert(jqXHR.responseText)
+            window.location.replace("/")
         },
         success: (data) => {
+            // DELETE LOADING GIF
+            $(".loading-gif").remove()
+
             // FIRST ITERATION
             createBtns(data.nRow, data.nCol)
             createBoard(data.pathOfMatrix[0], data.nRow, data.nCol)

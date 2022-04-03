@@ -38,7 +38,7 @@ def calculate_matrix():
         return jsonify(sumKurangPlusX = sumKurangPlusX, pathOfMatrix = pathOfMatrix, numOfNodes = numOfNodes, executionTime = executionTime, nRow = PositionMatrix.nRow, nCol = PositionMatrix.nCol)
 
     except KeyError:
-        return "Please input file .txt", 400
+        return "Please upload a txt file first!", 400
 
 @app.route("/upload", methods = ["POST"])
 def upload_txt():

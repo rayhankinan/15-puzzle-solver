@@ -13,8 +13,10 @@
         <header>
             <h1 class="header-title">15 Puzzle Solver</h1>
         </header>
-        <div class="board"></div>
         <div class="container">
+            <div class="board">
+                <img src="{{ url_for('static', filename='images/loading.gif') }}" class="loading-gif">
+            </div>
             <p class="nilai-kurang-x-label"></p>
             <p class="jumlah-node-label"></p>
             <p class="waktu-eksekusi-label"></p>
