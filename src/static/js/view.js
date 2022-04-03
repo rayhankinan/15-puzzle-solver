@@ -1,4 +1,4 @@
-let board, zx, zy
+let board, zx, zy, sumKurangPlusX, numOfNodes, executionTime
 
 const getPossibles = (nRow, nCol) => {
     let ii, jj, cx = [-1, 0, 1, 0], cy = [0, -1, 0, 1]
@@ -93,7 +93,14 @@ const createBtns = (nRow, nCol) => {
         }
     }
 }
-$(".board").ready(() => {
+
+const updateAttribute = (sumKurangPlusX, numOfNodes, executionTime) => {
+    $(".nilai-kurang-x-label").html(`Nilai dari KURANG(i) + X : ${sumKurangPlusX}`)
+    $(".jumlah-node-label").html(`Jumlah simpul yang dibangkitkan : ${numOfNodes}`)
+    $(".waktu-eksekusi-label").html(`Waktu eksekusi : ${executionTime} s`)
+}
+
+$(document).ready(() => {
     $.ajax({
         type: "GET",
         url: "/calculate",
@@ -110,8 +117,9 @@ $(".board").ready(() => {
             
             // OTHER ITERATION
             let index = 1
-            let interval = setInterval(() => {
+            var interval = setInterval(() => {
                 if (index == data.pathOfMatrix.length) {
+                    updateAttribute(data.sumKurangPlusX, data.numOfNodes, data.executionTime)
                     clearInterval(interval)
 
                 } else {
@@ -120,16 +128,9 @@ $(".board").ready(() => {
                     index++
                 }
             }, 500)
-
-            // OTHER ATTRIBUTE
-            ("#nilai-kurang-x-label").html(`Nilai dari KURANG(i) + X : ${data.sumKurangPlusX}`)
-            ("#jumlah-node-label").html(`Jumlah simpul yang dibangkitkan : ${data.numOfNodes}`)
-            ("#waktu-eksekusi-label").html(`Waktu eksekusi : ${executionTime} s`)
         }
     })
-})
 
-$(document).ready(() => {
     $(".back-button").click(() => {
         window.location.replace("/")
     })

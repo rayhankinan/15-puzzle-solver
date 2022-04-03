@@ -94,7 +94,7 @@ const createBtns = (nRow, nCol) => {
     }
 }
 
-$(".board").ready(() => {
+$(document).ready(() => {
     $.ajax({
         type: "GET",
         url: "/display",
@@ -109,9 +109,7 @@ $(".board").ready(() => {
             updateBtns(data.nRow, data.nCol)
         }
     })
-})
 
-$(document).ready(() => {
     $(".submission-form").submit((event) => {
         const formData = new FormData(event.target)
 
