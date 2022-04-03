@@ -50,8 +50,8 @@ def calculate_matrix():
 
         return jsonify(sumKurangPlusX = sumKurangPlusX, pathOfMatrix = pathOfMatrix, numOfNodes = numOfNodes, executionTime = executionTime, nRow = PositionMatrix.nRow, nCol = PositionMatrix.nCol)
 
-    except KeyError:
-        return "Please upload a txt file first!", 400
+    except Exception as e:
+        return str(e), 400
 
 @app.route("/upload_json", methods = ["POST"])
 def process_matrix():
