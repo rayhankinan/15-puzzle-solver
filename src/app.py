@@ -38,19 +38,11 @@ def upload_txt():
         return "Created", 201
 
     except Exception as e:
+        session["matrix"] = json.dumps(PositionTree.targetPosition.matrix.tolist())
+
         return str(e), 400
 
-@app.route("/clear", methods = ["DELETE"])
-def delete_txt():
-    try:
-        session.pop("matrix", None)
-
-        return "OK", 200
-
-    except Exception as e:
-        return str(e), 400
-
-@app.route("/calculate",  methods = ["GET"])
+@app.route("/calculate", methods = ["GET"])
 def calculate_matrix():
     try:
         PT = PositionTree(PositionMatrix(np.array(json.loads(session["matrix"]))))
@@ -65,12 +57,13 @@ def calculate_matrix():
 def process_matrix():
     try:
         data = request.get_json()
-
         session["matrix"] = json.dumps(data)
 
         return "Created", 201
 
     except Exception as e:
+        session["matrix"] = json.dumps(PositionTree.targetPosition.matrix.tolist())
+
         return str(e), 400
 
 if __name__ == "__main__":

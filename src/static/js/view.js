@@ -107,7 +107,6 @@ $(document).ready(() => {
         contentType:"application/json; charset=utf-8",
         error: (jqXHR) => {
             alert(jqXHR.responseText)
-            window.location.replace("/")
         },
         success: (data) => {
             // DELETE LOADING GIF
@@ -132,9 +131,5 @@ $(document).ready(() => {
                 }
             }, 500)
         }
-    })
-
-    $(".back-button").click(() => {
-        window.location.replace("/")
     })
 })

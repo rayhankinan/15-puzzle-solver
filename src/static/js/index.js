@@ -122,20 +122,7 @@ $(document).ready(() => {
                 alert(jqXHR.responseText)
             },
             success: () => {
-                window.location.replace("/")
-            }
-        })
-    })
-
-    $(".file-clear-button").click(() => {
-        $.ajax({
-            type: "DELETE",
-            url: "/clear",
-            error: (jqXHR) => {
-                alert(jqXHR.responseText)
-            },
-            success: () => {
-                window.location.replace("/")
+                window.location.reload()
             }
         })
     })
