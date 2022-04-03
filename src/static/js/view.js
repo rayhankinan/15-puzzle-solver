@@ -1,4 +1,4 @@
-let board, zx, zy, sumKurangPlusX, numOfNodes, executionTime
+let board, zx, zy
 
 const getPossibles = (nRow, nCol) => {
     let ii, jj, cx = [-1, 0, 1, 0], cy = [0, -1, 0, 1]
