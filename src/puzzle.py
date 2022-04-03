@@ -98,7 +98,7 @@ class PositionMatrix:
 
         for i in range(PositionMatrix.nRow):
             for j in range(PositionMatrix.nCol):
-                nilaiSumKurang += self.getKurang(PositionMatrix.nRow * i + j + 1)
+                nilaiSumKurang += self.getKurang(PositionMatrix.nCol * i + j + 1)
 
         return nilaiSumKurang
 
@@ -115,7 +115,7 @@ class PositionMatrix:
         
         for i in range(PositionMatrix.nRow):
             for j in range(PositionMatrix.nCol):
-                if self.matrix[i, j] != PositionMatrix.nRow * i + j + 1 and self.matrix[i, j] != PositionMatrix.nRow * PositionMatrix.nCol:
+                if self.matrix[i, j] != PositionMatrix.nCol * i + j + 1 and self.matrix[i, j] != PositionMatrix.nRow * PositionMatrix.nCol:
                     N += 1
 
         return N
@@ -124,9 +124,6 @@ class PositionMatrix:
         i, j = self.getIndexKosong()
 
         return (i + j) % 2
-
-    def getStringMatrix(self):
-        return self.matrix.astype(str)
 
     def getTotalCost(self):
         return self.currentCost + self.currentLength
@@ -154,7 +151,7 @@ class PositionMatrix:
 
             isPrevValid = other.matrix[i + deltaX, j + deltaY] == PositionMatrix.nRow * (i + deltaX) + (j + deltaY) + 1
             other.matrix[i, j], other.matrix[i + deltaX, j + deltaY] = other.matrix[i + deltaX, j + deltaY], other.matrix[i, j]
-            isFollowingValid = other.matrix[i, j] == PositionMatrix.nRow * i + j + 1
+            isFollowingValid = other.matrix[i, j] == PositionMatrix.nCol * i + j + 1
 
             if other.matrix.tobytes() in PositionMatrix.visitedNodes:
                 return None
@@ -185,7 +182,7 @@ class PositionMatrix:
 class PositionTree:
     # CONSTANT ATTRIBUTE
     move = ["UP", "RIGHT", "DOWN", "LEFT"]
-    targetPosition = PositionMatrix(np.array([[PositionMatrix.nRow * i + j + 1 for j in range(PositionMatrix.nCol)] for i in range(PositionMatrix.nRow)]))
+    targetPosition = PositionMatrix(np.array([[PositionMatrix.nCol * i + j + 1 for j in range(PositionMatrix.nCol)] for i in range(PositionMatrix.nRow)]))
 
     # CONSTRUCTOR
     def __init__(self, first):
@@ -245,14 +242,12 @@ class PositionTree:
         rawPath = self.branchAndBound()
         endTime = time()
 
-        pathOfStringMatrix = map(lambda T : T.getStringMatrix(), rawPath)
-
         numOfNodes = len(PositionMatrix.visitedNodes)
         PositionMatrix.visitedNodes = {}
 
         executionTime = endTime - startTime
 
-        return (sumKurangPlusX, pathOfStringMatrix, numOfNodes, executionTime)
+        return (sumKurangPlusX, rawPath, numOfNodes, executionTime)
 
 if __name__ == "__main__":
     try:

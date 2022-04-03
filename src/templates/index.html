@@ -7,9 +7,7 @@
         <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/stylesheet.css') }}">
         <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/logo.png') }}">
         <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-        <script type="text/javascript" src="{{ url_for('static', filename='js/upload.js') }}"></script>
-        <script type="text/javascript" src="{{ url_for('static', filename='js/clear.js') }}"></script>
-        <script type="text/javascript" src="{{ url_for('static', filename='js/calculate.js') }}"></script>
+        <script type="text/javascript" src="{{ url_for('static', filename='js/index.js') }}"></script>
     </head>
     <body>
         <header>
@@ -17,15 +15,7 @@
             <h1 class="header-title">15 Puzzle Solver</h1>
         </header>
         <div class="container">
-            <table class="puzzle-table">
-                {% for i in range(nRow) %}
-                    <tr class="row">
-                        {% for j in range(nCol)%}
-                            <td class="element">{{ matrix[i, j] if matrix[i, j] != None else "-" }}</td>
-                        {% endfor %}
-                    </tr>
-                {% endfor %}
-            </table>
+            <div class="board"></div>
             <form class="submission-form" enctype="multipart/form-data">
                 <input type="file" name="file" class="file-input-button" accept=".txt" required>
                 <button type="submit" class="file-submit-button">Upload</button>

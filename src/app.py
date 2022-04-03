@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, session
+from flask import Flask, render_template, request, session, jsonify
 from puzzle import PositionMatrix, PositionTree
 
 import json
@@ -10,24 +10,34 @@ app = Flask(__name__)
 
 app.config["SECRET_KEY"] = secrets.token_urlsafe()
 
+# FRONTEND
 @app.route("/", methods = ["GET"])
 def main_page():
-    try:
-        return render_template("index.html", matrix = PositionMatrix(np.array(json.loads(session["matrix"]))).getStringMatrix(), nRow = PositionMatrix.nRow, nCol = PositionMatrix.nCol)
-
-    except KeyError:
-        return render_template("index.html", matrix = PositionMatrix.getEmptyMatrix(), nRow = PositionMatrix.nRow, nCol = PositionMatrix.nCol)
+    return render_template("index.html")
 
 @app.route("/view", methods = ["GET"])
 def view_page():
-    try:
-        PT = PositionTree(PositionMatrix(np.array(json.loads(session["matrix"]))))
-        sumKurangPlusX, pathOfStringMatrix, numOfNodes, executionTime = PT.calculate()
+    return render_template("view.html")
 
-        return render_template("view.html", sumKurangPlusX = sumKurangPlusX, pathOfStringMatrix = pathOfStringMatrix, numOfNodes = numOfNodes, executionTime = executionTime, nRow = PositionMatrix.nRow, nCol = PositionMatrix.nCol)
+# BACKEND
+@app.route("/display", methods = ["GET"])
+def display_matrix():
+    try:
+        return jsonify(matrix = PositionMatrix(np.array(json.loads(session["matrix"]))).matrix.tolist(), nRow = PositionMatrix.nRow, nCol = PositionMatrix.nCol)
 
     except KeyError:
-        return render_template("view.html", sumKurangPlusX = 0, pathOfStringMatrix = [], numOfNodes = 0, executionTime = 0, nRow = PositionMatrix.nRow, nCol = PositionMatrix.nCol)
+        return jsonify(matrix = PositionTree.targetPosition.matrix.tolist(), nRow = PositionMatrix.nRow, nCol = PositionMatrix.nCol)
+
+@app.route("/calculate",  methods = ["GET"])
+def calculate_matrix():
+    try:
+        PT = PositionTree(PositionMatrix(np.array(json.loads(session["matrix"]))))
+        sumKurangPlusX, pathOfMatrixNP, numOfNodes, executionTime = PT.calculate()
+
+        return jsonify(sumKurangPlusX = sumKurangPlusX, pathOfMatrix = pathOfMatrixNP.tolist(), numOfNodes = numOfNodes, executionTime = executionTime, nRow = PositionMatrix.nRow, nCol = PositionMatrix.nCol)
+
+    except:
+        return jsonify(sumKurangPlusX = 0, pathOfStringMatrix = [], numOfNodes = 0, executionTime = 0, nRow = PositionMatrix.nRow, nCol = PositionMatrix.nCol)
 
 @app.route("/upload", methods = ["POST"])
 def upload_txt():
@@ -35,7 +45,7 @@ def upload_txt():
         file = request.files["file"]
         session["matrix"] = json.dumps(PositionMatrix.fromFile(file.stream.read().decode("ASCII")).matrix.tolist())
 
-        print(PositionMatrix(np.array(json.loads(session["matrix"]))).getStringMatrix(), file=sys.stdout) # REMOVE THIS
+        print(PositionMatrix(np.array(json.loads(session["matrix"]))).matrix, file=sys.stdout) # REMOVE THIS
 
         return "Created", 201
 
