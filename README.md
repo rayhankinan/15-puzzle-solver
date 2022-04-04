@@ -1,5 +1,5 @@
 # 15-puzzle-solver
-Disusun untuk memenuhi Tugas Kecil 3 IF2211 Strategi Algoritma "Penyelesaian Persoalan 15-Puzzle dengan Algoritma *Branch and Bound*"
+Disusun untuk memenuhi Tugas Kecil 3 IF2211 Strategi Algoritma "Penyelesaian Persoalan 15-*Puzzle* dengan Algoritma *Branch and Bound*"
 
 ## Daftar Isi
 * [Deskripsi Singkat Program](#deskripsi-singkat-program)
@@ -68,7 +68,7 @@ Disusun untuk memenuhi Tugas Kecil 3 IF2211 Strategi Algoritma "Penyelesaian Per
 3. Jika berhasil dijalankan, maka akan terdapat *window* Python pada komputer.
 
 ## Cara Menggunakan Program
-1. *Upload* file `.txt` sesuai dengan format yang terdapat pada folder `test` atau menggantinya secara manual pada program.
+1. *Upload* file `.txt` sesuai dengan format yang terdapat pada folder `test`.
 2. Tekan tombol *Calculate* pada program.
 3. Tunggu hingga program berhasil menemukan jawaban dari *puzzle*.
 4. Kemudian, program akan menunjukkan *step-by-step* yang dibutuhkan untuk mendapatkan solusi.
