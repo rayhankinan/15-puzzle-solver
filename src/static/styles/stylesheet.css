@@ -80,7 +80,7 @@ header {
     align-items: center;
 }
 
-.file-submit-button, .calculate-button {
+.file-submit-button, .file-clear-button, .calculate-button, .back-button {
     width: 120px;
     height: 45px;
     margin-top: 6px;
@@ -94,7 +94,7 @@ header {
     font-size: 14px;
 }
 
-.file-submit-button:hover, .calculate-button:hover {
+.file-submit-button:hover, .file-clear-button:hover, .calculate-button:hover, .back-button:hover {
     background-color: #111;
     color: #feffff;
     transition: all 0.25s ease;
