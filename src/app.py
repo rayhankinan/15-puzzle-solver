@@ -7,8 +7,6 @@ import secrets
 import os
 import numpy as np
 
-import sys
-
 app = Flask(__name__)
 
 app.config["SECRET_KEY"] = secrets.token_urlsafe()
