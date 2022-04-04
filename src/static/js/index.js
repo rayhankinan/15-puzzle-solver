@@ -99,7 +99,7 @@ $(document).ready(() => {
         type: "GET",
         url: "/display",
         contentType:"application/json; charset=utf-8",
-        async: false,
+        async: true,
         error: (jqXHR) => {
             alert(jqXHR.responseText)
         },
@@ -119,21 +119,7 @@ $(document).ready(() => {
             url: "/upload_txt",
             contentType: false,
             processData: false,
-            async: false,
-            error: (jqXHR) => {
-                alert(jqXHR.responseText)
-            },
-            success: () => {
-                window.location.reload()
-            }
-        })
-    })
-
-    $(".file-clear-button").click(() => {
-        $.ajax({
-            type: "DELETE",
-            url: "/clear",
-            async: false,
+            async: true,
             error: (jqXHR) => {
                 alert(jqXHR.responseText)
             },
@@ -147,7 +133,7 @@ $(document).ready(() => {
         $.ajax({
             type: "POST",
             url: "/upload_json",
-            async: false,
+            async: true,
             data: JSON.stringify(board),
             contentType: "application/json",
             error: (jqXHR) => {

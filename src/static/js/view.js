@@ -105,7 +105,7 @@ $(document).ready(() => {
         type: "GET",
         url: "/calculate",
         contentType:"application/json; charset=utf-8",
-        async: false,
+        async: true,
         error: (jqXHR) => {
             alert(jqXHR.responseText)
         },
@@ -132,19 +132,5 @@ $(document).ready(() => {
                 }
             }, 500)
         }
-    })
-
-    $(".back-button").click(() => {
-        $.ajax({
-            type: "DELETE",
-            url: "/clear",
-            async: false,
-            error: (jqXHR) => {
-                alert(jqXHR.responseText)
-            },
-            success: () => {
-                window.location.replace("/")
-            }
-        })
     })
 })
