@@ -105,9 +105,9 @@ $(document).ready(() => {
         type: "GET",
         url: "/calculate",
         contentType:"application/json; charset=utf-8",
+        async: false,
         error: (jqXHR) => {
             alert(jqXHR.responseText)
-            window.location.replace("/")
         },
         success: (data) => {
             // DELETE LOADING GIF
@@ -135,6 +135,16 @@ $(document).ready(() => {
     })
 
     $(".back-button").click(() => {
-        window.location.replace("/")
+        $.ajax({
+            type: "DELETE",
+            url: "/clear",
+            async: false,
+            error: (jqXHR) => {
+                alert(jqXHR.responseText)
+            },
+            success: () => {
+                window.location.replace("/")
+            }
+        })
     })
 })
